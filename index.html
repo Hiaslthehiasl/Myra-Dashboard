@@ -1,0 +1,133 @@
+<!-- deploy: Hiaslthehiasl/Myra-Dashboard -->
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Myra Securities – Dashboard</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --panel: #1e293b;
+    --panel-border: #334155;
+    --text: #e2e8f0;
+    --text-dim: #94a3b8;
+    --accent: #38bdf8;
+    --ok: #4ade80;
+    --warn: #fbbf24;
+    --danger: #f87171;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 32px;
+  }
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--panel-border);
+    padding-bottom: 16px;
+  }
+  header h1 { font-size: 20px; margin: 0; font-weight: 600; }
+  header .meta { font-size: 13px; color: var(--text-dim); }
+  section { margin-bottom: 32px; }
+  section h2 {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+  }
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  .kpi-card {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 8px;
+    padding: 16px;
+  }
+  .kpi-card .label { font-size: 13px; color: var(--text-dim); margin-bottom: 6px; }
+  .kpi-card .value { font-size: 26px; font-weight: 600; }
+  .kpi-card .trend { font-size: 12px; margin-top: 4px; }
+  .trend.up { color: var(--ok); }
+  .trend.down { color: var(--danger); }
+  .trend.flat { color: var(--text-dim); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--panel-border);
+  }
+  th { color: var(--text-dim); font-weight: 500; font-size: 12px; text-transform: uppercase; }
+  .status-pill {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+  }
+  .status-open { background: rgba(251,191,36,0.15); color: var(--warn); }
+  .status-resolved { background: rgba(74,222,128,0.15); color: var(--ok); }
+  #load-state {
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Myra Securities — Dashboard</h1>
+  <div class="meta" id="user-info">Nicht angemeldet</div>
+</header>
+
+<p id="load-state">Datenanbindung noch nicht konfiguriert – Platzhalterstruktur.</p>
+
+<section>
+  <h2>KPIs</h2>
+  <div class="kpi-grid" id="kpi-grid">
+    <!-- Platzhalter, wird per JS aus Datenquelle befüllt -->
+    <div class="kpi-card">
+      <div class="label">Beispiel-KPI</div>
+      <div class="value">–</div>
+      <div class="trend flat">wird noch angebunden</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Insights</h2>
+  <table id="insights-table">
+    <thead>
+      <tr><th>Datum</th><th>Insight</th><th>Kategorie</th></tr>
+    </thead>
+    <tbody>
+      <tr><td colspan="3" style="color:var(--text-dim)">Noch keine Daten verbunden</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Offene Fragen</h2>
+  <table id="questions-table">
+    <thead>
+      <tr><th>Frage</th><th>Verantwortlich</th><th>Status</th></tr>
+    </thead>
+    <tbody>
+      <tr><td colspan="3" style="color:var(--text-dim)">Noch keine Daten verbunden</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
