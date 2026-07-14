@@ -1,21 +1,33 @@
 // Konfiguration für Myra Dashboard
-// Diese Werte NICHT mit echten Secrets füllen (Client Secret gehört niemals in Frontend-Code).
-// Nur Client ID + Tenant ID sind hier korrekt - das sind öffentliche Identifikatoren, keine Geheimnisse.
+// Client ID + Tenant ID sind öffentliche Identifikatoren, keine Geheimnisse.
+// Ein Client Secret gehört NIE in Frontend-Code - wird hier auch nicht gebraucht,
+// da der Login per MSAL.js im Browser läuft (Authorization Code Flow mit PKCE,
+// kein Secret nötig für eine Single-Page-App).
 
 const MSAL_CONFIG = {
   auth: {
-    clientId: "PLACEHOLDER_APP_CLIENT_ID",       // Application (client) ID aus der Entra-App-Registrierung
-    authority: "https://login.microsoftonline.com/PLACEHOLDER_TENANT_ID",
-    redirectUri: window.location.origin
+    clientId: "0dcfb7a9-4f11-4abb-991c-be434d049720",
+    authority: "https://login.microsoftonline.com/5756f6c7-6b68-4cea-90c0-7f12786882ad",
+    redirectUri: window.location.origin + window.location.pathname
+  },
+  cache: {
+    cacheLocation: "sessionStorage"
   }
 };
 
-// SharePoint-Zielliste (wird gesetzt, sobald Listenstruktur steht)
+// Berechtigungen, die die App beim Login anfragt
+const GRAPH_SCOPES = ["User.Read", "Sites.Read.All"];
+
+// SharePoint-Zielstruktur — Werte hier eintragen, sobald die Listen angelegt sind
 const SHAREPOINT_CONFIG = {
-  siteId: "PLACEHOLDER_SITE_ID",
+  // Hostname + Site-Pfad deiner SharePoint-Seite, z.B. "hofmuth.sharepoint.com" / "sites/MyraDashboard"
+  siteHostname: "PLACEHOLDER_HOSTNAME",
+  sitePath: "PLACEHOLDER_SITE_PATH",
+
+  // Listennamen exakt wie in SharePoint angelegt
   lists: {
-    kpis: "PLACEHOLDER_LIST_ID_KPIS",
-    insights: "PLACEHOLDER_LIST_ID_INSIGHTS",
-    questions: "PLACEHOLDER_LIST_ID_QUESTIONS"
+    orgChart: "OrgChart",
+    summaries: "Summaries",
+    kpis: "KPIs"
   }
 };

@@ -36,6 +36,11 @@
   }
   header h1 { font-size: 20px; margin: 0; font-weight: 600; }
   header .meta { font-size: 13px; color: var(--text-dim); }
+  #login-btn {
+    background: var(--accent); color: #0f172a; border: none;
+    padding: 8px 14px; border-radius: 6px; font-size: 13px; font-weight: 600;
+    cursor: pointer;
+  }
   section { margin-bottom: 32px; }
   section h2 {
     font-size: 14px;
@@ -44,23 +49,27 @@
     color: var(--text-dim);
     margin-bottom: 12px;
   }
-  .kpi-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 16px;
-  }
-  .kpi-card {
+  .card {
     background: var(--panel);
     border: 1px solid var(--panel-border);
     border-radius: 8px;
-    padding: 16px;
+    padding: 18px 20px;
   }
-  .kpi-card .label { font-size: 13px; color: var(--text-dim); margin-bottom: 6px; }
-  .kpi-card .value { font-size: 26px; font-weight: 600; }
-  .kpi-card .trend { font-size: 12px; margin-top: 4px; }
-  .trend.up { color: var(--ok); }
-  .trend.down { color: var(--danger); }
-  .trend.flat { color: var(--text-dim); }
+  .card p { margin: 0; line-height: 1.6; font-size: 14px; }
+  .card .updated { color: var(--text-dim); font-size: 12px; margin-top: 10px; }
+
+  /* Org chart */
+  #orgchart { overflow-x: auto; padding: 8px 0; }
+  .org-level { display: flex; gap: 20px; margin-bottom: 20px; position: relative; }
+  .org-node {
+    background: var(--panel); border: 1px solid var(--panel-border);
+    border-radius: 8px; padding: 10px 14px; min-width: 150px;
+  }
+  .org-node .name { font-weight: 600; font-size: 13px; }
+  .org-node .role { color: var(--text-dim); font-size: 12px; margin-top: 2px; }
+  .org-children { margin-left: 24px; border-left: 1px dashed var(--panel-border); padding-left: 20px; }
+
+  /* KPI table */
   table { width: 100%; border-collapse: collapse; font-size: 14px; }
   th, td {
     text-align: left;
@@ -74,11 +83,12 @@
     border-radius: 12px;
     font-size: 12px;
   }
-  .status-open { background: rgba(251,191,36,0.15); color: var(--warn); }
-  .status-resolved { background: rgba(74,222,128,0.15); color: var(--ok); }
-  #load-state {
-    color: var(--text-dim);
-    font-size: 13px;
+  .status-offen { background: rgba(251,191,36,0.15); color: var(--warn); }
+  .status-erreicht { background: rgba(74,222,128,0.15); color: var(--ok); }
+
+  #load-state { color: var(--text-dim); font-size: 13px; }
+  .placeholder-note {
+    color: var(--text-dim); font-size: 13px; font-style: italic;
   }
 </style>
 </head>
@@ -86,47 +96,52 @@
 
 <header>
   <h1>Myra Securities — Dashboard</h1>
-  <div class="meta" id="user-info">Nicht angemeldet</div>
+  <div>
+    <span class="meta" id="user-info">Nicht angemeldet</span>
+    <button id="login-btn">Anmelden</button>
+  </div>
 </header>
 
-<p id="load-state">Datenanbindung noch nicht konfiguriert – Platzhalterstruktur.</p>
+<p id="load-state">Wird geladen …</p>
 
 <section>
-  <h2>KPIs</h2>
-  <div class="kpi-grid" id="kpi-grid">
-    <!-- Platzhalter, wird per JS aus Datenquelle befüllt -->
-    <div class="kpi-card">
-      <div class="label">Beispiel-KPI</div>
-      <div class="value">–</div>
-      <div class="trend flat">wird noch angebunden</div>
-    </div>
+  <h2>Org Chart</h2>
+  <div class="card">
+    <div id="orgchart"></div>
   </div>
 </section>
 
 <section>
-  <h2>Insights</h2>
-  <table id="insights-table">
-    <thead>
-      <tr><th>Datum</th><th>Insight</th><th>Kategorie</th></tr>
-    </thead>
-    <tbody>
-      <tr><td colspan="3" style="color:var(--text-dim)">Noch keine Daten verbunden</td></tr>
-    </tbody>
-  </table>
+  <h2>Größte HR-Probleme</h2>
+  <div class="card">
+    <p id="hr-summary">–</p>
+    <div class="updated" id="hr-updated"></div>
+  </div>
 </section>
 
 <section>
-  <h2>Offene Fragen</h2>
-  <table id="questions-table">
-    <thead>
-      <tr><th>Frage</th><th>Verantwortlich</th><th>Status</th></tr>
-    </thead>
-    <tbody>
-      <tr><td colspan="3" style="color:var(--text-dim)">Noch keine Daten verbunden</td></tr>
-    </tbody>
-  </table>
+  <h2>Größte Myra-Probleme</h2>
+  <div class="card">
+    <p id="myra-summary">–</p>
+    <div class="updated" id="myra-updated"></div>
+  </div>
 </section>
 
+<section>
+  <h2>HR-KPIs</h2>
+  <div class="card">
+    <table id="kpi-table">
+      <thead>
+        <tr><th>KPI</th><th>Definition</th><th>Zielwert</th><th>Aktuell</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="5" class="placeholder-note">Noch keine KPI-Werte — folgt, sobald Systemzugriff besteht</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<script src="https://alcdn.msauth.net/browser/2.38.3/js/msal-browser.min.js"></script>
 <script src="config.js"></script>
 <script src="app.js"></script>
 </body>
