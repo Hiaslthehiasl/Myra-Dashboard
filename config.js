@@ -18,15 +18,15 @@ const MSAL_CONFIG = {
 // Berechtigungen, die die App beim Login anfragt
 const GRAPH_SCOPES = ["User.Read", "Sites.Read.All"];
 
-// SharePoint-Zielstruktur — Werte hier eintragen, sobald die Listen angelegt sind
+// SharePoint-Zielstruktur
 const SHAREPOINT_CONFIG = {
-  // Hostname + Site-Pfad deiner SharePoint-Seite, z.B. "hofmuth.sharepoint.com" / "sites/MyraDashboard"
-  siteHostname: "PLACEHOLDER_HOSTNAME",
-  sitePath: "PLACEHOLDER_SITE_PATH",
+  // Root-Site, kein Unterpfad
+  siteHostname: "hofmuth.sharepoint.com",
+  sitePath: "",
 
-  // Listennamen exakt wie in SharePoint angelegt
+  // Listennamen exakt wie in SharePoint angelegt ("Org Chart" mit Leerzeichen)
   lists: {
-    orgChart: "OrgChart",
+    orgChart: "Org Chart",
     summaries: "Summaries",
     kpis: "KPIs"
   }

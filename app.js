@@ -64,15 +64,18 @@ async function graphGet(path) {
 }
 
 async function getSiteId() {
-  const data = await graphGet(
-    "/sites/" + SHAREPOINT_CONFIG.siteHostname + ":/" + SHAREPOINT_CONFIG.sitePath
-  );
+  // Root-Site: kein Unterpfad -> einfacher Hostname-Aufruf.
+  // Unterseite (falls sitePath gesetzt ist): Hostname + ":/" + Pfad
+  const path = SHAREPOINT_CONFIG.sitePath
+    ? "/sites/" + SHAREPOINT_CONFIG.siteHostname + ":/" + SHAREPOINT_CONFIG.sitePath
+    : "/sites/" + SHAREPOINT_CONFIG.siteHostname;
+  const data = await graphGet(path);
   return data.id;
 }
 
 async function getListItems(siteId, listName) {
   const data = await graphGet(
-    "/sites/" + siteId + "/lists/" + listName + "/items?expand=fields"
+    "/sites/" + siteId + "/lists/" + encodeURIComponent(listName) + "/items?expand=fields"
   );
   return data.value.map(item => item.fields);
 }
