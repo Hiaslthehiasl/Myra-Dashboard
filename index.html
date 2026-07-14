@@ -141,7 +141,12 @@
   </div>
 </section>
 
-<script src="https://alcdn.msauth.net/browser/2.38.3/js/msal-browser.min.js"></script>
+<script src="https://alcdn.msauth.net/browser/2.35.0/js/msal-browser.min.js"></script>
+<script>
+  if (typeof msal === 'undefined') {
+    document.write('<script src="https://alcdn.msftauth.net/browser/2.35.0/js/msal-browser.min.js"><\/script>');
+  }
+</script>
 <script src="config.js"></script>
 <script src="app.js"></script>
 </body>
